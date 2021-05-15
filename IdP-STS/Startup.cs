@@ -63,6 +63,9 @@ namespace STS
                 // app.UseDatabaseErrorPage();
             }
             app.UseStaticFiles();
+
+            if (!Directory.Exists(Path.Combine(Directory.GetCurrentDirectory(), @"Resources/usersImages")))
+                Directory.CreateDirectory(Path.Combine(Directory.GetCurrentDirectory(), @"Resources/usersImages"));
             app.UseStaticFiles(new StaticFileOptions()
             {
                 FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"Resources/usersImages")),
