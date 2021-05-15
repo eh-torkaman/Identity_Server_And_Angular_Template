@@ -20,80 +20,82 @@ using Microsoft.AspNetCore.Http;
 
 namespace STS
 {
-  public class Startup
-  {
-    public IWebHostEnvironment Environment { get; }
-    public IConfiguration Configuration { get; }
-
-    public Startup(IWebHostEnvironment environment, IConfiguration configuration)
+    public class Startup
     {
-      Environment = environment;
-      Configuration = configuration;
-    }
+        public IWebHostEnvironment Environment { get; }
+        public IConfiguration Configuration { get; }
 
-    public void ConfigureServices(IServiceCollection services)
-    {
-      services.AddControllersWithViews()
-           .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+        public Startup(IWebHostEnvironment environment, IConfiguration configuration)
+        {
+            Environment = environment;
+            Configuration = configuration;
+        }
+
+        public void ConfigureServices(IServiceCollection services)
+        {
+            services.AddControllersWithViews()
+                 .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
 
-      services.AddCors(
-        sa => sa.AddPolicy("Cors", builder => builder
-                                                    .WithOrigins("http://localhost:4200")
-                                                    .AllowAnyHeader()
-                                                    .AllowAnyMethod())
-      );
+            services.AddCors(
+              sa => sa.AddPolicy("Cors", builder => builder
+                                                          .WithOrigins("http://localhost:4200")
+                                                          .AllowAnyHeader()
+                                                          .AllowAnyMethod())
+            );
 
-      services.AddFormOptionConfiguration();
+            services.AddFormOptionConfiguration();
 
-      services.AddTransient<IProfileService, CustomProfileService>();
+            services.AddTransient<IProfileService, CustomProfileService>();
 
-      services.AddDbContext<ApplicationDbContext>(options =>
-      {
-        options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), sqlServerOptionsAction => { sqlServerOptionsAction.CommandTimeout(20); });
-        options.EnableSensitiveDataLogging();
-        options.EnableDetailedErrors();
-      });
+            services.AddDbContext<ApplicationDbContext>(options =>
+            {
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), sqlServerOptionsAction => { sqlServerOptionsAction.CommandTimeout(20); });
+                options.EnableSensitiveDataLogging();
+                options.EnableDetailedErrors();
+            });
 
-      services.AddIdentity_ConfigureApplicationCookie();
+            services.AddIdentity_ConfigureApplicationCookie();
 
-      services.AddIdentityServerStuff();
+            services.AddIdentityServerStuff();
 
-      services.AddAuthentication("Bearer")
-             .AddIdentityServerAuthentication(options =>
-             //.AddJwtBearer(options =>
-             {
-                 options.Authority = "https://localhost:5001/";
-                 options.RequireHttpsMetadata = false;
-                 options.ApiName = "IdPApi";
+            services.AddAuthentication("Bearer")
+                   .AddIdentityServerAuthentication(options =>
+                   //.AddJwtBearer(options =>
+                   {
+                       options.Authority = "https://localhost:5001/";
+                       options.RequireHttpsMetadata = false;
+                       options.ApiName = "IdPApi";
                  //  options.se = "IdPApi_secret";
-               });
+             });
+        }
+
+        public void Configure(IApplicationBuilder app)
+        {
+            if (Environment.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+                // app.UseDatabaseErrorPage();
+            }
+            app.UseStaticFiles();
+            if (!Directory.Exists(Path.Combine(Directory.GetCurrentDirectory(), @"Resources/usersImages")))
+                Directory.CreateDirectory(Path.Combine(Directory.GetCurrentDirectory(), @"Resources/usersImages"));
+            app.UseStaticFiles(new StaticFileOptions()
+            {
+                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"Resources/usersImages")),
+                RequestPath = new PathString("/userImage")
+            });
+
+            app.UseRouting();
+
+            app.UseCors("Cors");
+
+            app.UseIdentityServer();
+            app.UseAuthorization();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapDefaultControllerRoute();
+            });
+        }
     }
-
-    public void Configure(IApplicationBuilder app)
-    {
-      if (Environment.IsDevelopment())
-      {
-        app.UseDeveloperExceptionPage();
-        // app.UseDatabaseErrorPage();
-      }
-      app.UseStaticFiles();
-      app.UseStaticFiles(new StaticFileOptions()
-      {
-        FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"Resources/usersImages")),
-        RequestPath = new PathString("/userImage")
-      });
-
-      app.UseRouting();
-
-      app.UseCors("Cors");
-
-      app.UseIdentityServer();
-      app.UseAuthorization();
-      app.UseEndpoints(endpoints =>
-      {
-        endpoints.MapDefaultControllerRoute();
-      });
-    }
-  }
 }
