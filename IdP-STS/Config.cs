@@ -1,4 +1,4 @@
-﻿// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
+// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 
@@ -11,24 +11,24 @@ namespace STS
     public static class Config
     {
         public static IEnumerable<ApiResource> ApiResources =>
-            new ApiResource[]
+             new ApiResource[]
             {
-                new ApiResource(){Name=""}
+                new ApiResource(){Name="IdPApi",Scopes={ "IdPApi"} }//,ApiSecrets= { new Secret("IdPApi_secret") }
             };
-        public static IEnumerable<IdentityResource> IdentityResources =>      
+    public static IEnumerable<IdentityResource> IdentityResources =>      
             new IdentityResource[]  {   
             new IdentityResources.OpenId(),
             new IdentityResources.Profile(),
             };
 
         public static IEnumerable<ApiScope> ApiScopes =>
-            new ApiScope[]
+             new ApiScope[]
             {
                 new ApiScope("scope1"),
-                new ApiScope("scope2"),
+                new ApiScope("IdPApi"),
             };
 
-        public static IEnumerable<Client> Clients =>
+    public static IEnumerable<Client> Clients =>
             new Client[]
             {
                 // m2m client credentials flow client
@@ -56,7 +56,7 @@ namespace STS
                     PostLogoutRedirectUris = { "https://localhost:44300/signout-callback-oidc" },
 
                     AllowOfflineAccess = true,
-                    AllowedScopes = { "openid", "profile", "scope2" }
+                    AllowedScopes = { "openid", "profile", "scope1" }
                 },
                   new Client
                 {
@@ -78,7 +78,7 @@ namespace STS
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
-                        "scope1"
+                       "scope1","IdPApi"
                     },
                     AccessTokenLifetime = 600
                 },

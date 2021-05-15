@@ -22,7 +22,7 @@ namespace IdP.Controller
 
 
     [HttpPost("password/Options")]
-    [Authorize(Roles = "SuperAdmin")]
+    [Authorize(Roles = "SuperAdmin", AuthenticationSchemes = "Bearer")]
     public ActionResult SetCustomPasswordOptions(CustomPasswordOptions customPasswordOptions)
     {
       var cpo = db.CustomPasswordOptions.OrderBy(t => t.Id).LastOrDefault();

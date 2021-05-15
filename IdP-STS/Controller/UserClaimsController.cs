@@ -1,4 +1,4 @@
-﻿using STS.Data;
+using STS.Data;
 using STS.Models;
 using IdentityModel;
 using Microsoft.AspNetCore.Http;
@@ -17,7 +17,7 @@ namespace STS.Controller
 {
     [Route("api/claims/{userName}")]
     [ApiController]
-    [Authorize(Roles ="SuperAdmin")]
+    [Authorize(Roles ="SuperAdmin", AuthenticationSchemes = "Bearer")]
     public class UserClaimsController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> userMgr;
