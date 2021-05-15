@@ -1,0 +1,53 @@
+<mat-accordion class="" multi>
+  <mat-expansion-panel [disabled]="!(user?.dbClaims?.length)"  >
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        <span matBadge="{{user?.dbClaims?.length}}" matBadgePosition="after" matBadgeColor="accent"> کلیم ها </span>
+      </mat-panel-title>
+      <mat-panel-description>
+        -
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <mat-selection-list #calims [multiple]="false">
+      <mat-list-option *ngFor="let claim of user?.dbClaims" [value]="claim">
+        {{claim.claimType}} |  {{claim.claimValue}}
+      </mat-list-option>
+    </mat-selection-list>
+
+    <p *ngIf="!(calims.selectedOptions.selected[0]?.value.claimType)">
+      یک مورد را جهت حذف انتخاب کنید
+    </p>
+
+    <button *ngIf="(calims.selectedOptions.selected[0]?.value.claimType)"
+         class="btnDeleteClaim"   mat-raised-button color="warn" (click)="DeleteClaim(calims.selectedOptions.selected[0]?.value)">
+      حذف کلیم
+    </button>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        اضافه کردن کلیم
+      </mat-panel-title>
+      <mat-panel-description>
+        کلیک کنید
+        <mat-icon>account_circle</mat-icon>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <form [formGroup]="ClaimForm" (ngSubmit)="CreateNewClaim()">
+      <mat-form-field>
+        <mat-label>نوع کلیم</mat-label>
+        <input matInput maxlength="50" formControlName="claimType">
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>مقدار کلیم</mat-label>
+        <input matInput maxlength="50" formControlName="claimValue">
+      </mat-form-field>
+    </form>
+    <button class="btnCreateNewClaim" mat-raised-button color="primary" (click)="CreateNewClaim()">ایجاد کلیم جدید</button>
+
+  </mat-expansion-panel>
+</mat-accordion>

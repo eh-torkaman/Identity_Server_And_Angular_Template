@@ -1,0 +1,14 @@
+
+.FormCreateNewUser {
+  display: flex;
+  margin: 3px auto;
+  padding: 3px 8px;
+  max-width: 600px;
+}
+
+  .FormCreateNewUser .mat-form-field {
+    margin: 2px 8px;
+    flex-grow: 1;
+    flex-shrink: 1;
+    max-height: 40px;
+  }

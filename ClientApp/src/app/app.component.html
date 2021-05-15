@@ -1,0 +1,42 @@
+<!--{{_user|json}}-->
+<mat-toolbar color="primary">
+  <mat-toolbar-row>
+    <button mat-button>
+      <mat-icon (click)="sidenav.toggle()">menu</mat-icon>
+    </button>
+
+    <span class="menu-spacer"></span>
+    <div class="hideSm">
+      <button mat-button [routerLink]="''">
+        <mat-icon>home</mat-icon>
+      </button>
+      <button *ngIf="isSuperAdmin" mat-button [routerLink]="'/manage-users'"> مدیریت کاربران </button>
+
+      <div class="btnLoginsWrapper">
+        <button mat-button> {{_user?.profile?.name}}  </button>
+        <button class="loginButtons" *ngIf="!isLoggedIn" mat-button color="accent" (click)="login()">ورود </button>
+        <button class="loginButtons" mat-button *ngIf="isLoggedIn" color="warn" (click)="logOut()"> خروج </button>
+      </div>
+
+    </div>
+  </mat-toolbar-row>
+</mat-toolbar>
+
+<div class="routerOutlet">
+  <router-outlet></router-outlet>
+</div>
+
+<mat-sidenav-container>
+  <mat-sidenav #sidenav>
+    <mat-nav-list>
+      <a mat-list-item [routerLink]="'/manage-users'" (click)="sidenav.toggle()"> مدیریت کاربران </a>
+      <a mat-list-item (click)="sidenav.toggle()">بستن</a>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <div style="height: 88vh;">
+      <router-outlet></router-outlet>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+

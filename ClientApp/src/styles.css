@@ -1,0 +1,29 @@
+.ErrorSnackBar{
+    background-color:orangered;
+    color:black;
+    font-weight:bold;
+}
+/* You can add global styles to this file, and also import other style files */
+.mainHtml {
+  display: flex;
+  justify-content: center;
+  box-sizing: border-box;
+}
+html, body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  
+}
+.mainBody {
+  max-width: 1800px;
+  flex-grow: 1 ;
+}
+
+.snackBarError{
+    background-color:red;
+    color:black;
+    font-weight:bold;
+}

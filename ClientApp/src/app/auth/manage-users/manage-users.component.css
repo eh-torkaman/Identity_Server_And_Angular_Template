@@ -1,0 +1,21 @@
+.inputFilterUsers{
+    padding:3px;
+    margin-right:10px;
+    max-width:800px;
+    margin:auto;
+    display:block;
+}
+.mat-paginator
+{
+    display:flex;
+    margin:auto;
+    max-width:500px;
+}
+
+.userCardWrapper{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:space-evenly;
+    
+}
+

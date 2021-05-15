@@ -1,0 +1,69 @@
+<mat-card class="userCard">
+
+  <mat-card-header>
+    <mat-card-title>{{user?.userName}}</mat-card-title>
+    <mat-card-subtitle></mat-card-subtitle>
+  </mat-card-header>
+
+  <div class="userCardImage" [ngStyle]="{'background-image':'url('+stsAuthorityUrl+'userImage/'+user.userName+'.jpg'+'?'+imageVersrionStr+')'}" alt="photo of user">
+  </div>
+
+  <mat-card-content>
+    <app-user-claims [userName]="user.userName">
+    </app-user-claims>
+  </mat-card-content>
+
+
+  <mat-accordion class="">
+
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          ریست رمز عبور
+        </mat-panel-title>
+        <mat-panel-description>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <mat-card-content>
+        <form [formGroup]="FormResetUserPass" class="FormResetUserPass">
+          <mat-form-field>
+            <mat-label>رمز عبور</mat-label>
+            <input matInput maxlength="50" type="password" formControlName="password">
+          </mat-form-field>
+
+          <button mat-flat-button color="primary" aria-label="ResetUserPass" (click)="ResetUserPass(user.userName)">
+            ریست پسورد
+          </button>
+
+        </form>
+      </mat-card-content>
+    </mat-expansion-panel>
+
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          آپلود تصویر
+        </mat-panel-title>
+        <mat-panel-description>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <mat-card-content>
+
+        <app-upload [uploadUrl]="stsAuthorityUrl+'api/users/'+user.userName+'/uploadImage'" (onUploadFinished)="UploadImageUseFinished($event)"></app-upload>
+      </mat-card-content>
+    </mat-expansion-panel>
+  </mat-accordion>
+
+
+
+
+
+
+
+  <mat-card-actions class="btnUserDelLockWrapper">
+    <button mat-flat-button color="warn" (click)="DeleteUser()">Delete User</button>
+    <button mat-flat-button (click)="LockUnlock()" color="{{user.isLockedOut?'primary':'accent'}}"> {{user.lockDescription}}</button>
+  </mat-card-actions>
+
+
+</mat-card>

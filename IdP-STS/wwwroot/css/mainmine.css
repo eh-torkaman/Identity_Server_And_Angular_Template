@@ -1,0 +1,67 @@
+﻿body {
+    font-family: "WMitra";
+}
+
+
+ 
+
+
+
+@font-face {
+    font-family: "Samim2";
+    font-weight: normal;
+    src: url("~/fonts/Samim-persian-digits-overwrite.eot?#") format("eot"), url("~/fonts/Samim-persian-digits-overwrite.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "Samim2";
+    font-weight: bold;
+    src: url("~/fonts/Samim-Bold-persian-digits-overwrite.eot?#") format("eot"), url("~/fonts/Samim-Bold-persian-digits-overwrite.ttf") format("truetype");
+}
+
+
+
+
+@font-face {
+    font-family: "Samim";
+    font-weight: normal;
+    src: url("~/fonts/Samim.eot?#") format("eot"), url("~/fonts/Samim.woff") format("woff"), url("~/fonts/Samim.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "Samim";
+    font-weight: bold;
+    src: url("~/fonts/Samim-Bold.eot?#") format("eot"), url("~/fonts/Samim-Bold.woff") format("woff"), url("~/fonts/Samim-Bold.ttf") format("truetype");
+}
+
+
+
+@font-face {
+    font-family: "WMitra";
+    font-style: normal;
+    font-weight: normal;
+    src: url("/fonts/WebMitra.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "WMitraBold";
+    font-style: normal;
+    font-weight: bold;
+    src: url("/fonts/WebMitraBold.ttf") format("truetype");
+}
+
+
+@font-face {
+    font-family: "WTitr";
+    font-style: normal;
+    font-weight: bold;
+    src: url("/fonts/WebTitr.ttf") format("truetype");
+}
+
+
+@font-face {
+    font-family: "WYekan";
+    font-style: normal;
+    font-weight: normal;
+    src: url("~/fonts/WebYekan.ttf") format("truetype");
+}

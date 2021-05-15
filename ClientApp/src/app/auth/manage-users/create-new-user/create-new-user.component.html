@@ -1,0 +1,35 @@
+
+
+<mat-accordion class="" multi>
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        ساخت کاربر جدید
+        <mat-icon>account_box</mat-icon>
+
+      </mat-panel-title>
+      <mat-panel-description>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+
+    <form [formGroup]="FormCreateNewUser" class="FormCreateNewUser">
+      <mat-form-field>
+        <mat-label>نام کاربری:</mat-label>
+        <input matInput maxlength="50" formControlName="userName">
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>رمز عبور</mat-label>
+        <input matInput maxlength="50" type="password" formControlName="password">
+      </mat-form-field>
+
+      <button mat-flat-button color="warn" aria-label="CreateNewUse" (click)="CreateNewUser()">
+        ساخت کاربر جدید
+      </button>
+
+    </form>
+
+
+  </mat-expansion-panel>
+  </mat-accordion>
