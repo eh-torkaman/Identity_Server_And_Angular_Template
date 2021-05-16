@@ -12,23 +12,20 @@ export class AppComponent implements OnInit {
   title = 'appIS';
   isLoggedIn = false;
   _user: any;
-
+  isSuperAdmin: boolean=false;
   
-  public get isSuperAdmin(): boolean {
-    return this._authService.isSuperAdmin();
-    }
+ 
     
-  constructor(private _authService: AuthService, private httpClient: HttpClient ) {
-    this._authService.loginChanged.subscribe(loggedIn => {
-      this.isLoggedIn = loggedIn;
-      this._authService.getUser().then(user => { this._user = user; })
-    });
-
-   
+  constructor(private _authService: AuthService, private httpClient: HttpClient) {
   }
   ngOnInit(): void {
-    this._authService.isLoggedIn().then(loggedIn => { this.isLoggedIn = loggedIn; });
-    this._authService.getUser().then(user => { this._user = user; });
+    this._authService.loginChanged.subscribe(loggedIn => {
+      this._authService.isLoggedIn().then(loggedIn => {
+        this.isLoggedIn = loggedIn;
+        this.isSuperAdmin = this._authService.IsSuperAdmin;
+        this._authService.getUser().then(user => { this._user = user; })
+      });
+    });
   }
 
   login() {

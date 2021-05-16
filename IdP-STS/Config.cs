@@ -24,7 +24,6 @@ namespace STS
         public static IEnumerable<ApiScope> ApiScopes =>
              new ApiScope[]
             {
-                new ApiScope("scope1"),
                 new ApiScope("IdPApi"),
             };
 
@@ -40,7 +39,7 @@ namespace STS
                     AllowedGrantTypes = GrantTypes.ClientCredentials,
                     ClientSecrets = { new Secret("511536EF-F270-4058-80CA-1C89C192F69A".Sha256()) },
 
-                    AllowedScopes = { "scope1" }
+                   // AllowedScopes = { "scope1" }
                 },
 
                 // interactive client using code flow + pkce
@@ -69,7 +68,7 @@ namespace STS
                     RequireConsent = false,
 
 
-                    RedirectUris =           { "http://localhost:4200/signin-callback" },//, "http://localhost:4200/assets/silent-callback.html" },
+                    RedirectUris =           { "http://localhost:4200/signin-callback" , "http://localhost:4200/assets/silent-callback.html" },
                     PostLogoutRedirectUris = { "http://localhost:4200/signout-callback" },
                     AllowedCorsOrigins =     { "http://localhost:4200" },
                  //   FrontChannelLogoutUri=  "http://localhost:4200/signout-callback" ,
@@ -78,9 +77,9 @@ namespace STS
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
-                       "scope1","IdPApi"
+                        "IdPApi"
                     },
-                    AccessTokenLifetime = 600
+                    AccessTokenLifetime = 90
                 },
 
             };

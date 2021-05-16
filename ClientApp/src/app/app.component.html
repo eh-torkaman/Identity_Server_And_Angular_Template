@@ -11,9 +11,8 @@
         <mat-icon>home</mat-icon>
       </button>
       <button *ngIf="isSuperAdmin" mat-button [routerLink]="'/manage-users'"> مدیریت کاربران </button>
-
       <div class="btnLoginsWrapper">
-        <button mat-button> {{_user?.profile?.name}}  </button>
+        <button mat-button *ngIf="isLoggedIn"> {{_user?.profile?.name}}  </button>
         <button class="loginButtons" *ngIf="!isLoggedIn" mat-button color="accent" (click)="login()">ورود </button>
         <button class="loginButtons" mat-button *ngIf="isLoggedIn" color="warn" (click)="logOut()"> خروج </button>
       </div>

@@ -18,9 +18,9 @@ export class AdminRouteGuardComponent implements CanActivate {
   constructor(private _authService: AuthService) { }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
-    if (!this._authService.isAuthenticated())
-      this._authService.login();
-    return this._authService.isSuperAdmin();
+    console.log('app-admin-route-guard : ' + this._authService.IsSuperAdmin)
+    //if (!this._authService.isAuthenticated())      this._authService.login();
+    return this._authService.IsSuperAdmin;
   }
 
 }

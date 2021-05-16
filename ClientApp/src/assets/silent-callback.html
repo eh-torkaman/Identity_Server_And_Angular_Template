@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=1024, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>silent Renewal page</title>
+  <!--ClientApp\node_modules\oidc-client\dist\oidc-client.min.js-->
+  <script src="/assets/js/oidc-client.min.js"></script>
+</head>
+<body>
+  <script>
+    const stsSetting = {
+      authority: "http://localhost:5001/",
+      client_id: "spa-client",
+      scope: "openid profile IdPApi",
+      response_type:"code"
+    }
+    console.log("assets/silent-callback....")
+    new Oidc.UserManager(stsSetting).signinSilentCallback()
+      .catch(err => { console.error(err); });
+  </script>
+</body>
+</html>
