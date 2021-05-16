@@ -19,7 +19,7 @@ export class AuthService {
       authority: Constants.stsAuthority,
       client_id: Constants.clientId,
       redirect_uri: `${Constants.clientRoot}signin-callback`,
-      scope: "IdPApi openid profile",//Constants.scope,
+      scope: Constants.scope,
       response_type: 'code',
       post_logout_redirect_uri: `${Constants.clientRoot}signout-callback`,
       automaticSilentRenew: true,
