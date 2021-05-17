@@ -27,7 +27,8 @@
 <mat-sidenav-container>
   <mat-sidenav #sidenav>
     <mat-nav-list>
-      <a mat-list-item [routerLink]="'/manage-users'" (click)="sidenav.toggle()"> مدیریت کاربران </a>
+      <a mat-list-item [routerLink]="'/'" (click)="sidenav.toggle()">خانه</a>
+      <a mat-list-item *ngIf="isSuperAdmin" [routerLink]="'/manage-users'" (click)="sidenav.toggle()"> مدیریت کاربران </a>
       <a mat-list-item (click)="sidenav.toggle()">بستن</a>
     </mat-nav-list>
   </mat-sidenav>

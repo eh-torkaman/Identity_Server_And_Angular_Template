@@ -13,7 +13,8 @@ namespace STS
         public static IEnumerable<ApiResource> ApiResources =>
              new ApiResource[]
             {
-                new ApiResource(){Name="IdPApi",Scopes={ "IdPApi"} }//,ApiSecrets= { new Secret("IdPApi_secret") }
+                new ApiResource(){Name="IdPApi",Scopes={ "IdPApi"} },//,ApiSecrets= { new Secret("IdPApi_secret") }
+                 new ApiResource(){Name="WebApi1",Scopes={ "WebApi1"},ApiSecrets= { new Secret("secret123") } }
             };
     public static IEnumerable<IdentityResource> IdentityResources =>      
             new IdentityResource[]  {   
@@ -25,6 +26,7 @@ namespace STS
              new ApiScope[]
             {
                 new ApiScope("IdPApi"),
+                new ApiScope("WebApi1")
             };
 
     public static IEnumerable<Client> Clients =>
@@ -37,8 +39,7 @@ namespace STS
                     ClientName = "Client Credentials Client",
 
                     AllowedGrantTypes = GrantTypes.ClientCredentials,
-                    ClientSecrets = { new Secret("511536EF-F270-4058-80CA-1C89C192F69A".Sha256()) },
-
+                    ClientSecrets = { new Secret("not yet defined client".Sha256()) },
                    // AllowedScopes = { "scope1" }
                 },
 
@@ -46,7 +47,7 @@ namespace STS
                 new Client
                 {
                     ClientId = "interactive",
-                    ClientSecrets = { new Secret("49C1A7E1-0C79-4A89-A3D6-A37998FB86B0".Sha256()) },
+                    ClientSecrets = { new Secret("not yet defined client".Sha256()) },
 
                     AllowedGrantTypes = GrantTypes.Code,
 
@@ -55,7 +56,7 @@ namespace STS
                     PostLogoutRedirectUris = { "https://localhost:44300/signout-callback-oidc" },
 
                     AllowOfflineAccess = true,
-                    AllowedScopes = { "openid", "profile", "scope1" }
+                    AllowedScopes = { "openid", "profile"}
                 },
                   new Client
                 {
@@ -77,9 +78,9 @@ namespace STS
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
-                        "IdPApi"
+                        "IdPApi","WebApi1"
                     },
-                    AccessTokenLifetime = 90
+                    AccessTokenLifetime = 600
                 },
 
             };

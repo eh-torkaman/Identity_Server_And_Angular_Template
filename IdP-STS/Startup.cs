@@ -39,7 +39,7 @@ namespace STS
 
             services.AddCors(
               sa => sa.AddPolicy("Cors", builder => builder
-                                                          .WithOrigins("http://localhost:4200")
+                                                          .AllowAnyOrigin()
                                                           .AllowAnyHeader()
                                                           .AllowAnyMethod())
             );
@@ -64,10 +64,10 @@ namespace STS
                    //.AddJwtBearer(options =>
                    {
                        options.Authority = "https://localhost:5001/";
-                       options.RequireHttpsMetadata = false;
+                       options.RequireHttpsMetadata = true;
                        options.ApiName = "IdPApi";
-                 //  options.se = "IdPApi_secret";
-             });
+                       options.JwtValidationClockSkew = TimeSpan.Zero;
+                   });
         }
 
         public void Configure(IApplicationBuilder app)
@@ -78,6 +78,7 @@ namespace STS
                 // app.UseDatabaseErrorPage();
             }
             app.UseStaticFiles();
+
             if (!Directory.Exists(Path.Combine(Directory.GetCurrentDirectory(), @"Resources/usersImages")))
                 Directory.CreateDirectory(Path.Combine(Directory.GetCurrentDirectory(), @"Resources/usersImages"));
             app.UseStaticFiles(new StaticFileOptions()

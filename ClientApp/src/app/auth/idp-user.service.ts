@@ -1,9 +1,9 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { EventEmitter, Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, throwError } from 'rxjs';
 import { Constants } from './constants';
 import { dbClaim,dbUser, UserNameAndPassword } from './interfaces/interfaces_usersOnIdp';
-import { debounceTime, distinctUntilChanged, filter, map, switchMap } from 'rxjs/operators';
+import { catchError, debounceTime, distinctUntilChanged, filter, map, switchMap, tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -38,7 +38,10 @@ export class IdPUsersService {
 
 
   private getAllUsers(): Observable<dbUser[] >{
-    return this.httpClient.get<dbUser[]>(`${Constants.stsAuthority}api/users`)
+    return this.httpClient.get<dbUser[]>(`${Constants.stsAuthority}api/users`).pipe(
+      tap(data => console.log('dbUsers[] : ', JSON.stringify(data))),
+      catchError(this.handleError)
+    );
   }
 
   CreateNewClaimForUser(dbClaim: dbClaim, userName: string): Observable<any> {
@@ -67,6 +70,27 @@ export class IdPUsersService {
   ResetUserPass(userName: string, password: string) {
     return this.httpClient.put(`${Constants.stsAuthority}api/users/`, {
       'userName': userName,'password': password });
+  }
+
+
+
+
+
+
+  private handleError(err: any) {
+    // in a real world app, we may send the server to some remote logging infrastructure
+    // instead of just logging it to the console
+    let errorMessage: string;
+    if (err.error instanceof ErrorEvent) {
+      // A client-side or network error occurred. Handle it accordingly.
+      errorMessage = `An error occurred: ${err.error.message}`;
+    } else {
+      // The backend returned an unsuccessful response code.
+      // The response body may contain clues as to what went wrong,
+      errorMessage = `Backend returned code ${err.status}: ${err.body.error}`;
+    }
+    console.error(err);
+    return throwError(errorMessage);
   }
 }
 
