@@ -37,7 +37,6 @@ export class UserClaimsComponent implements  OnInit{
   }
 
   ngOnInit(): void {
-    console.log("UserClaimsComponent  ngOnInit +=>> " + this.userName)
     this.bindData();
   }
 

@@ -22,6 +22,7 @@ import { AdminRouteGuardComponent } from './auth/admin-route-guard/admin-route-g
 import { CreateNewUserComponent } from './auth/manage-users/create-new-user/create-new-user.component';
 import { UploadComponent } from './upload/upload.component';
 import { UserCardComponent } from './auth/manage-users/user-card/user-card.component';
+import { CurrentUserManagerComponent } from './auth/currentUser/current-user-manager/current-user-manager.component';
 
  
 
@@ -30,7 +31,8 @@ import { UserCardComponent } from './auth/manage-users/user-card/user-card.compo
     AppComponent,
     SigninRedirectCallbackComponent,
     SignoutRedirectCallbackComponent,
-    ManageUsersComponent, UserClaimsComponent, AdminRouteGuardComponent, CreateNewUserComponent, UploadComponent, UserCardComponent
+    ManageUsersComponent, UserClaimsComponent, AdminRouteGuardComponent, CreateNewUserComponent, UploadComponent
+    , UserCardComponent, CurrentUserManagerComponent, 
   ],
   imports: [
     BrowserModule,

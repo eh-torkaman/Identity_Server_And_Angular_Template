@@ -1,13 +1,9 @@
-import { AfterViewInit, ChangeDetectorRef, Component, Input, OnInit, ViewChild } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
+import {  Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { isPropertyName } from 'typescript';
 import { IdPUsersService } from '../../idp-user.service';
 import { dbClaim, dbUser } from '../../interfaces/interfaces_usersOnIdp';
 import { FormGroup, FormControl, RequiredValidator, Validators } from '@angular/forms';
-import { timeout } from 'rxjs/operators';
 import { MessageService } from '../../../messageService/message.service';
-import { constants } from 'os';
 import { Constants } from '../../constants';
 @Component({
   selector: 'app-user-card',

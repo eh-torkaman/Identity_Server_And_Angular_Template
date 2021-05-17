@@ -20,7 +20,7 @@ namespace STS.Controller
 {
   [Route("api/users")]
   [ApiController]
-  //[Authorize(Roles = "SuperAdmin")]
+  
   [Authorize(Roles = "SuperAdmin", AuthenticationSchemes = "Bearer")]
   public class UsersController : ControllerBase
   {
@@ -32,13 +32,6 @@ namespace STS.Controller
       this.userMgr = userManager;
       this.db = db;
     }
-
-    //[Route("/api/UsersAndClaims")]
-    //[HttpGet]
-    //public IActionResult GetAllUsersAndClaims()
-    //{
-    //    return Ok(db.VUsersClaims.ToList());
-    //}
 
     [HttpGet]
     public IActionResult GetAllUsers()
@@ -138,35 +131,7 @@ namespace STS.Controller
       }
     }
 
-    [HttpPut("{userName}")]
-    [Authorize( AuthenticationSchemes = "Bearer")]
-    public IActionResult ChangeUserPass(string userName, ChangeUserPassDto changeUserPassDto)
-    {
-      try
-      {
-        if (HttpContext.User.Identity.Name != userName)
-        {
-          throw new Exception("تنها می توانید پسورد خودتان را عوض کنید");
-        }
-        var user = userMgr.FindByNameAsync(userName).Result;
-        if (user == null)
-        {
-          return BadRequest("این کاربر وجود ندارد");
-        }
-        var result = userMgr.ChangePasswordAsync(user, changeUserPassDto.OldPassword, changeUserPassDto.NewPassword).Result;
-        if (!result.Succeeded)
-        {
-          throw new Exception(result.Errors.First().Description);
-        }
-        return Ok();
-      }
-      catch (Exception ee)
-      {
-        Log.Error(ee.Message);
-        return BadRequest(ee.Message);
-      }
-    }
-
+  
     [HttpPut("{userName}/Lock")]
     public IActionResult ChangeUserPass(string userName)
     {
@@ -177,7 +142,6 @@ namespace STS.Controller
         {
           return BadRequest("این کاربر وجود ندارد");
         }
-
 
 
         if ((user.LockoutEnd != null) && (user.LockoutEnd > DateTimeOffset.Now))

@@ -1,0 +1,47 @@
+
+
+<div *ngIf="currentDbUser$ | async  as user">
+  {{user.userName}}
+  {{user.isLockedOut}}
+  <div class="userCardImage" [ngStyle]="{'background-image':'url('+stsAuthorityUrl+'userImage/'+user.userName+'.jpg'+'?'+user.profileImageNumber+')'}" alt="photo of user">
+  </div>
+
+  <mat-list>
+
+    <ng-template ngFor let-claim [ngForOf]="user.dbClaims" let-i="index" let-isFirst="first">
+      <mat-list-item >
+        <div class="userListFlexContainer">
+          <div class="userListFlexItem"> {{claim.claimType}} </div>
+          <div class="userListFlexItem">   {{claim.claimValue}}</div>
+        </div>
+      </mat-list-item>
+      <mat-divider></mat-divider>
+    </ng-template>
+ 
+  </mat-list>
+
+
+  <div>
+    <form [formGroup]="FormChangeUserPass" class="FormChangeUserPass">
+      <mat-form-field>
+        <mat-label>رمز عبور فعلی:</mat-label>
+        <input matInput maxlength="50" type="Password" formControlName="oldPassword">
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>رمز عبور جدید:</mat-label>
+        <input matInput maxlength="50" type="Password" formControlName="newPassword">
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>تکرار رمز عبور جدید:</mat-label>
+        <input matInput maxlength="50" type="Password" formControlName="confirmPassword">
+      </mat-form-field>
+
+      <button mat-flat-button color="primary" aria-label="ChangeUserPass" [disabled]="!FormChangeUserPass.valid" (click)="ChangeUserPass(user.userName)">
+        تغییر رمز عبور
+      </button>
+
+    </form>
+  </div>
+
+</div>

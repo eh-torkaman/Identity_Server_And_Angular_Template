@@ -1,4 +1,3 @@
-import { release } from "process";
 
 export interface dbClaim {
     id: number;
@@ -25,3 +24,9 @@ export interface UserNameAndPassword {
   userName: string;
   password: string;
 }
+
+export interface ChangeUserPass {
+  oldPassword: string;
+  newPassword: string;
+}
+

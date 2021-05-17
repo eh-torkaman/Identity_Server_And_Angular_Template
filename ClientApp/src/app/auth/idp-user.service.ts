@@ -2,8 +2,9 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { EventEmitter, Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, Subject, throwError } from 'rxjs';
 import { Constants } from './constants';
-import { dbClaim,dbUser, UserNameAndPassword } from './interfaces/interfaces_usersOnIdp';
-import { catchError, debounceTime, distinctUntilChanged, filter, map, switchMap, tap } from 'rxjs/operators';
+import { dbClaim, dbUser, UserNameAndPassword, ChangeUserPass } from './interfaces/interfaces_usersOnIdp';
+import { catchError, debounceTime, distinctUntilChanged, filter, map, shareReplay, startWith, switchMap, tap } from 'rxjs/operators';
+import { MessageService } from '../messageService/message.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,8 +12,8 @@ import { catchError, debounceTime, distinctUntilChanged, filter, map, switchMap,
 export class IdPUsersService {
 
   init: boolean = false;
-  constructor(private httpClient: HttpClient) {
-    
+  constructor(private httpClient: HttpClient, private messageService: MessageService) {
+    this.loadCurrentUser();
   }
 
   public ClaimDataChanged() {
@@ -72,8 +73,26 @@ export class IdPUsersService {
       'userName': userName,'password': password });
   }
 
-
-
+  ///////////////////////////////
+  private CurrentDbUser: Subject<dbUser> = new Subject<dbUser>();
+  public CurrentDbUser$ : Observable<dbUser> = this.CurrentDbUser.asObservable().pipe(  shareReplay(1));
+  private loadCurrentUser() {
+     this.httpClient.get<dbUser>(`${Constants.stsAuthority}api/CurrentUser`).pipe(
+      tap(data => console.log('CurrentUser : ', JSON.stringify(data))),
+       catchError(this.handleError)
+     )
+       .subscribe(dbUser => { this.CurrentDbUser.next(dbUser); }
+         , (err) => this.messageService.NotifyErr(err));
+  }
+  public ChangeUserPass(changeUserPass: ChangeUserPass) {
+    this.httpClient.put(`${Constants.stsAuthority}api/CurrentUser/`, changeUserPass)
+      .pipe(catchError(this.handleError))
+      .subscribe(
+        _ => { this.loadCurrentUser(); },
+        (err) => this.messageService.NotifyErr(err)
+    );
+  }
+  ///////////////////////////////
 
 
 
