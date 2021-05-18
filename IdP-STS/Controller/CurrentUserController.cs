@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using IdentityServer4.Models;
+using IdP.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -21,14 +23,14 @@ namespace IdP.Controller
          
         private readonly UserManager<ApplicationUser> userMgr;
         private readonly ApplicationDbContext db;
+
         private string userName { get { return (HttpContext.User?.Identity?.Name)??"BadUser"; } }
-        public CurrentUserController(UserManager<ApplicationUser> userManager, ApplicationDbContext db)
+        public CurrentUserController(UserManager<ApplicationUser> userManager, ApplicationDbContext db )
         {
             this.userMgr = userManager;
             this.db = db;
         }
 
-         
         [HttpGet]
         public IActionResult GetUser()
         {
@@ -38,7 +40,7 @@ namespace IdP.Controller
 
         [HttpPut]
         [Authorize(AuthenticationSchemes = "Bearer")]
-        public IActionResult ChangeUserPass(ChangeUserPassDto changeUserPassDto)
+        public ActionResult ChangeUserPass(ChangeUserPassDto changeUserPassDto)
         {
             try
             {
@@ -48,12 +50,16 @@ namespace IdP.Controller
                 {
                     throw new Exception(result.Errors.First().Description);
                 }
-                return Ok();
+                var rs= new CustomMessages() { 
+                    new CustomMessage { Message = "رمز عبور تغییر کرد" },
+                    new CustomMessage { } };
+                return Ok( rs);
             }
             catch (Exception ee)
             {
                 Log.Error(ee.Message);
-                return BadRequest(ee.Message);
+                var rs = new CustomMessages() {new CustomMessage (ee),};
+                return BadRequest(rs);
             }
         }
 

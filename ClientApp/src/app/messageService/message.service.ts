@@ -13,23 +13,50 @@ export class MessageService {
     this._snackBar.open(input, "", { duration: duration })
   }
 
+  private flattenCustomMessage(customMessages: ICustomMessage[]): string {
+    let rs = "";
+    let i = 0;
+    for (let cm of customMessages) {
+      i++;
+      rs +=   i+". "+cm.message+"      ";
+    }
+    return rs;
+  }
   NotifyErr(err: Error, duration: number = 5000) {
-    console.warn(err.message);
-    console.warn(err);
+    console.warn("---------NotifyErr>>>>-----")
+    console.error(JSON.stringify(err));
     if (err instanceof HttpErrorResponse) {
       let error = err;
-      //console.warn(error.error[Object.keys(error.error)[0]]);
-
+      let msg = "";
       let httpErr = (err as HttpErrorResponse);
-      let msg = httpErr.message + "  " +
-        typeof (httpErr.error) == "string" ? httpErr.error : JSON.stringify(httpErr.error)
+
+      let customMessages=<Array<CustomMessage>>httpErr.error
+      if (!!customMessages) {
+        msg = this.flattenCustomMessage(customMessages)
+      } else {
+        msg = httpErr.message + "  " + typeof (httpErr.error) == "string" ? httpErr.error : JSON.stringify(httpErr.error)
+      }
       this._snackBar.open(msg, "", { duration: duration, panelClass: "ErrorSnackBar" })
-      console.error(msg);
     }
     else {
       this._snackBar.open(err.message, "", { duration: duration })
-
     }
-   
+    console.warn("---------NotifyErr<<<<<<------")
   }
+
+  
+}
+export class CustomMessage implements ICustomMessage {
+    message: string;
+    name: string;
+    stack: string;
+  isError: boolean;
+  shouldLog: boolean;
+}
+export interface ICustomMessage {
+  message: string;
+  name: string;
+  stack: string;
+  isError: boolean;
+  shouldLog: boolean;
 }

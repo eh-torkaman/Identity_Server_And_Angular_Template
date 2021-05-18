@@ -1,6 +1,6 @@
 
 
-<div *ngIf="currentDbUser$ | async  as user">
+<div *ngIf="currentDbUser$ | async as user ">
   {{user.userName}}
   {{user.isLockedOut}}
   <div class="userCardImage" [ngStyle]="{'background-image':'url('+stsAuthorityUrl+'userImage/'+user.userName+'.jpg'+'?'+user.profileImageNumber+')'}" alt="photo of user">

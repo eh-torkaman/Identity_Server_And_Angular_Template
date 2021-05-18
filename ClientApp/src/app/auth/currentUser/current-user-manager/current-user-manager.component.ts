@@ -25,13 +25,13 @@ export class CurrentUserManagerComponent implements OnInit {
   }
 
   stsAuthorityUrl: string = Constants.stsAuthority;
-  currentDbUser$: Observable<dbUser> = this.idpService.CurrentDbUser$;
+  currentDbUser$: Observable<dbUser|null> = this.idpService.CurrentDbUser$;
 
   FormChangeUserPass: FormGroup = new FormGroup({});
 
   ngOnInit(): void {
   }
   ChangeUserPass(userName: string) {
-
+    this.idpService.ChangeUserPass(this.FormChangeUserPass.value)
   }
 }
