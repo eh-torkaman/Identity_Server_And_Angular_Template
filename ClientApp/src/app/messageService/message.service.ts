@@ -9,10 +9,18 @@ export class MessageService {
 
   constructor(private _snackBar: MatSnackBar) { }
 
-  Notify(input: string, duration: number=1000) {
-    this._snackBar.open(input, "", { duration: duration })
-  }
+  Notify(input: string | Array<CustomMessage>, duration: number = 1000) {
+    let msg = input as string;
+    let customMessages = <Array<CustomMessage>>input;
+    if (!!customMessages)
+      msg = this.flattenCustomMessage(customMessages);
 
+    console.log("input : ",JSON.stringify(input));
+    console.log(!!customMessages)
+    console.info("Notify: ",msg)
+    this._snackBar.open(msg, "", { duration: duration })
+  }
+   
   private flattenCustomMessage(customMessages: ICustomMessage[]): string {
     let rs = "";
     let i = 0;
@@ -22,6 +30,7 @@ export class MessageService {
     }
     return rs;
   }
+
   NotifyErr(err: Error, duration: number = 5000) {
     console.warn("---------NotifyErr>>>>-----")
     console.error(JSON.stringify(err));

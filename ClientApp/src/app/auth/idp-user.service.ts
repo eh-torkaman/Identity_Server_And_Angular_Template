@@ -84,7 +84,6 @@ export class IdPUsersService {
      this.httpClient.get<dbUser>(`${Constants.stsAuthority}api/CurrentUser`).pipe(
       tap(data => console.log('CurrentUser : ', JSON.stringify(data))),
        catchError(this.handleError),
-      // catchError(p => { return empty; })
      )
        .subscribe(dbUser => { this.CurrentDbUser.next(dbUser); }
          , (err) => this.messageService.NotifyErr(err));
@@ -95,7 +94,7 @@ export class IdPUsersService {
     //  .pipe(tap(rs => console.log(rs)),        catchError(this.handleError  ))
       .subscribe(
          rs => {
-          this.messageService.Notify(rs.message );
+          this.messageService.Notify(rs );
             this.loadCurrentUser();
           },
            (err) => { console.warn(JSON.stringify( err)); this.messageService.NotifyErr(err) }

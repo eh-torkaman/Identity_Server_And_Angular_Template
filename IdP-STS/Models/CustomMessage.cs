@@ -14,7 +14,7 @@ namespace IdP.Models
         public bool ShouldLog = false;
 
 
-        public CustomMessage(bool isError=false,String message ="",string name="",string stack="" ,bool shouldLog=fale)
+        public CustomMessage(bool isError=false,String message ="",string name="",string stack="" ,bool shouldLog=false)
         {
             this.Message = message;
             this.Name = name;
@@ -38,6 +38,7 @@ namespace IdP.Models
         {
 
         }
+
         public CustomMessages(CustomMessage msg)
         {
             this.Add(msg);
