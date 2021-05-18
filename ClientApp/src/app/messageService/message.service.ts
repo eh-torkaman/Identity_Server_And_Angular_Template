@@ -11,9 +11,14 @@ export class MessageService {
 
   Notify(input: string | Array<CustomMessage>, duration: number = 1000) {
     let msg = input as string;
+
+    console.info("Notify: msg: ", msg,)
+
     let customMessages = <Array<CustomMessage>>input;
-    if (!!customMessages)
+
+    if ((!!customMessages) && (typeof (input) !== "string")) {
       msg = this.flattenCustomMessage(customMessages);
+    }
 
     console.log("input : ",JSON.stringify(input));
     console.log(!!customMessages)

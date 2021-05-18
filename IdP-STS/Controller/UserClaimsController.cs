@@ -12,6 +12,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using IdP.Models;
 
 namespace STS.Controller
 {
@@ -34,7 +35,8 @@ namespace STS.Controller
             var user = userMgr.FindByNameAsync(userName).Result;
             if (user == null)
             {
-                return NotFound("این کاربر وجود ندارد");
+                var rs = new CustomMessages() { new CustomMessage { Message = "این کاربر وجود ندارد",IsError=true  } };
+                return NotFound(rs);
             }
             var claims = userMgr.GetClaimsAsync(user).Result;
             return Ok(claims);
@@ -47,11 +49,15 @@ namespace STS.Controller
             try
             {
                 if (claim.ClaimType == "" || claim.ClaimValue == "")
-                    return BadRequest("هر دو متغیر نوع و مقدار یک کلیم باید غیر خالی باشند");
+                {
+                    var rs = new CustomMessages() { new CustomMessage { Message = "هر دو متغیر نوع و مقدار یک کلیم باید غیر خالی باشند", IsError = true } };
+                    return BadRequest(rs);
+                }
                 var user = userMgr.FindByNameAsync(userName).Result;
                 if (user == null)
                 {
-                    return NotFound("این کاربر وجود ندارد");
+                    var rs = new CustomMessages() { new CustomMessage { Message = "این کاربر وجود ندارد", IsError = true } };
+                    return NotFound(rs);
                 }
 
                 var cl = new System.Security.Claims.Claim(claim.ClaimType, claim.ClaimValue);
@@ -63,7 +69,8 @@ namespace STS.Controller
                     ))
                     )
                 {
-                    return BadRequest("این کلیم برای این کاربر قبلا موجود می باشد ، ابتدا آن را پاک کنید");
+                    var rs = new CustomMessages() { new CustomMessage { Message = "این کلیم برای این کاربر قبلا موجود می باشد ، ابتدا آن را پاک کنید", IsError = true } };
+                    return BadRequest(rs);
                 }
 
                 var result = userMgr.AddClaimAsync(user, cl).Result;
@@ -77,7 +84,8 @@ namespace STS.Controller
             catch (Exception ee)
             {
                 Log.Error(ee.Message);
-                return BadRequest(ee.Message);
+             var rs=   new CustomMessages() { new CustomMessage(ee) };
+                return BadRequest(rs);
             }
         }
 
@@ -89,7 +97,8 @@ namespace STS.Controller
                 var user = userMgr.FindByNameAsync(userName).Result;
                 if (user == null)
                 {
-                    return NotFound("این کاربر وجود ندارد");
+                    var rs = new CustomMessages() { new CustomMessage { Message = "این کاربر وجود ندارد", IsError = true } };
+                    return NotFound(rs);
                 }
 
                 var claimsToDelete = db.VUsersClaims.Where(t => t.UserName.ToLower() == userName.ToLower()).Where(t => t.ClaimType.ToLower() == claim.ClaimType)
@@ -97,7 +106,8 @@ namespace STS.Controller
 
                 if (claimsToDelete.Count() == 0)
                 {
-                    return NotFound("چیزی پیدا نشد");
+                    var rs = new CustomMessages() { new CustomMessage { Message = "چیزی پیدا نشد", IsError = true } };
+                    return NotFound(rs);
                 }
                 var result = userMgr.RemoveClaimsAsync(user, claimsToDelete).Result;
                 if (!result.Succeeded)
@@ -109,7 +119,8 @@ namespace STS.Controller
             catch (Exception ee)
             {
                 Log.Error(ee.Message);
-                return BadRequest(ee.Message);
+                var rs = new CustomMessages() { new CustomMessage(ee) };
+                return BadRequest(rs);
             }
         }
 

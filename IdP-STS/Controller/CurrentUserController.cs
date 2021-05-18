@@ -50,8 +50,7 @@ namespace IdP.Controller
                 {
                     throw new Exception(result.Errors.First().Description);
                 }
-                var rs= new CustomMessages() { 
-                    new CustomMessage { Message = "رمز عبور تغییر کرد" } };
+                var rs= new CustomMessages() {new CustomMessage { Message = "رمز عبور تغییر کرد" } };
                 return Ok( rs);
             }
             catch (Exception ee)

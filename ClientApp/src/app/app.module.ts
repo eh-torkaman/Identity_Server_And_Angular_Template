@@ -4,7 +4,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http'
 
 import { SigninRedirectCallbackComponent } from './auth/signin-redirect-callback/signin-redirect-callback.component';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './material.module';
@@ -37,7 +36,6 @@ import { CurrentUserManagerComponent } from './auth/currentUser/current-user-man
   imports: [
     BrowserModule,
     AppRoutingModule,
-    NgbModule,
     HttpClientModule,
     BrowserAnimationsModule,
     MaterialModule,
