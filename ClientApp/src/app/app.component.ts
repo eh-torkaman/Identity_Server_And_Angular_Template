@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from './auth/auth.service';
 import { Constants } from './auth/constants';
+import { MessageService } from './messageService/message.service';
 
 @Component({
   selector: 'app-root',
@@ -16,7 +17,7 @@ export class AppComponent implements OnInit {
   
  
     
-  constructor(private _authService: AuthService, private httpClient: HttpClient) { }
+  constructor(private _authService: AuthService, private httpClient: HttpClient,private msgSrv:MessageService) { }
 
   ngOnInit(): void {
     this._authService.loginChanged.subscribe(loggedIn => {
@@ -34,5 +35,10 @@ export class AppComponent implements OnInit {
 
   logOut() {
     this._authService.logout();
+  }
+
+  cl(){
+    console.log("dsfsd");
+this.msgSrv.onError();
   }
 }

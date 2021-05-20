@@ -10,6 +10,8 @@ import { MaterialModule } from './material.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
+import { SnotifyModule, SnotifyService, ToastDefaults } from 'ng-snotify';
+
 
 import { AuthIntercepterService } from './auth/auth-intercepter.service';
 import { ManageUsersComponent } from './auth/manage-users/manage-users.component';
@@ -40,8 +42,10 @@ import { CurrentUserManagerComponent } from './auth/currentUser/current-user-man
     BrowserAnimationsModule,
     MaterialModule,
     FormsModule, ReactiveFormsModule
+    ,SnotifyModule
   ],
-  providers: [{ provide: HTTP_INTERCEPTORS, useClass: AuthIntercepterService, multi: true }],
+  providers: [{ provide: HTTP_INTERCEPTORS, useClass: AuthIntercepterService, multi: true },
+    { provide: 'SnotifyToastConfig', useValue: ToastDefaults }, SnotifyService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
