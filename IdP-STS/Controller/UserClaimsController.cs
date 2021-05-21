@@ -35,7 +35,7 @@ namespace STS.Controller
             var user = userMgr.FindByNameAsync(userName).Result;
             if (user == null)
             {
-                var rs = new CustomMessages() { new CustomMessage { Message = "این کاربر وجود ندارد",IsError=true  } };
+                var rs = new CustomMessages() { new CustomMessage { Message = "این کاربر وجود ندارد", MsgTypeEnum = MsgTypeEnum.Error } };
                 return NotFound(rs);
             }
             var claims = userMgr.GetClaimsAsync(user).Result;
@@ -50,13 +50,13 @@ namespace STS.Controller
             {
                 if (claim.ClaimType == "" || claim.ClaimValue == "")
                 {
-                    var rs = new CustomMessages() { new CustomMessage { Message = "هر دو متغیر نوع و مقدار یک کلیم باید غیر خالی باشند", IsError = true } };
+                    var rs = new CustomMessages() { new CustomMessage { Message = "هر دو متغیر نوع و مقدار یک کلیم باید غیر خالی باشند", MsgTypeEnum = MsgTypeEnum.Error } };
                     return BadRequest(rs);
                 }
                 var user = userMgr.FindByNameAsync(userName).Result;
                 if (user == null)
                 {
-                    var rs = new CustomMessages() { new CustomMessage { Message = "این کاربر وجود ندارد", IsError = true } };
+                    var rs = new CustomMessages() { new CustomMessage { Message = "این کاربر وجود ندارد", MsgTypeEnum = MsgTypeEnum.Error } };
                     return NotFound(rs);
                 }
 
@@ -69,7 +69,7 @@ namespace STS.Controller
                     ))
                     )
                 {
-                    var rs = new CustomMessages() { new CustomMessage { Message = "این کلیم برای این کاربر قبلا موجود می باشد ، ابتدا آن را پاک کنید", IsError = true } };
+                    var rs = new CustomMessages() { new CustomMessage { Message = "این کلیم برای این کاربر قبلا موجود می باشد ، ابتدا آن را پاک کنید", MsgTypeEnum = MsgTypeEnum.Error } };
                     return BadRequest(rs);
                 }
 
@@ -97,7 +97,7 @@ namespace STS.Controller
                 var user = userMgr.FindByNameAsync(userName).Result;
                 if (user == null)
                 {
-                    var rs = new CustomMessages() { new CustomMessage { Message = "این کاربر وجود ندارد", IsError = true } };
+                    var rs = new CustomMessages() { new CustomMessage { Message = "این کاربر وجود ندارد", MsgTypeEnum = MsgTypeEnum.Error } };
                     return NotFound(rs);
                 }
 
@@ -106,7 +106,7 @@ namespace STS.Controller
 
                 if (claimsToDelete.Count() == 0)
                 {
-                    var rs = new CustomMessages() { new CustomMessage { Message = "چیزی پیدا نشد", IsError = true } };
+                    var rs = new CustomMessages() { new CustomMessage { Message = "چیزی پیدا نشد", MsgTypeEnum = MsgTypeEnum.Error } };
                     return NotFound(rs);
                 }
                 var result = userMgr.RemoveClaimsAsync(user, claimsToDelete).Result;

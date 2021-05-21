@@ -37,8 +37,5 @@ export class AppComponent implements OnInit {
     this._authService.logout();
   }
 
-  cl(){
-    console.log("dsfsd");
-this.msgSrv.onError();
-  }
+  
 }

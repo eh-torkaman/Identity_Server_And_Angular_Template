@@ -56,7 +56,8 @@ namespace IdP.Controller
             catch (Exception ee)
             {
                 Log.Error(ee.Message);
-                var rs = new CustomMessages() {new CustomMessage (ee),};
+                var tt0 = new CustomMessage { Message = "رمز عبور تغییر نکرد", MsgTypeEnum = MsgTypeEnum.Warning };
+                var rs = new CustomMessages() {new CustomMessage (ee), tt0 };
                 return BadRequest(rs);
             }
         }

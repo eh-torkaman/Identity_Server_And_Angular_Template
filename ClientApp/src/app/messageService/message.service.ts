@@ -1,18 +1,19 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
+//import { MatSnackBar } from '@angular/material/snack-bar';
  
   
-import { Component } from '@angular/core';
-import { Observable } from 'rxjs';
+//import { Component } from '@angular/core';
+//import { Observable } from 'rxjs';
 import { SnotifyPosition, SnotifyService, SnotifyToastConfig } from 'ng-snotify';
+//import { Tracing } from 'trace_events';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MessageService {
 
-  constructor(private _snackBar: MatSnackBar,private snotifyService: SnotifyService) { }
+  constructor(/*private _snackBar: MatSnackBar,*/private snotifyService: SnotifyService) { }
 
   Notify(input: string | Array<CustomMessage>, duration: number = 1000) {
     let msg = input as string;
@@ -22,51 +23,69 @@ export class MessageService {
     let customMessages = <Array<CustomMessage>>input;
 
     if ((!!customMessages) && (typeof (input) !== "string")) {
-      msg = this.flattenCustomMessage(customMessages);
+      for(let customErr of customMessages){
+        this.showCustomMessage(customErr,duration);
+      }
     }
-
-    console.log("input : ",JSON.stringify(input));
-    console.log(!!customMessages)
-    console.info("Notify: ",msg)
-    this._snackBar.open(msg, "", { duration: duration })
+    let conf=this.getConfig();
+    this.snotifyService.info(msg, "" ,{...conf,timeout:duration});
+   // this._snackBar.open(msg, "", { duration: duration })
   }
    
-  private flattenCustomMessage(customMessages: ICustomMessage[]): string {
-    let rs = "";
-    let i = 0;
-    for (let cm of customMessages) {
-      i++;
-      rs +=   i+". "+cm.message+"      ";
-    }
-    return rs;
-  }
+  
+  showCustomMessage(cm:CustomMessage,duration:number){
+    const icon = `https://placehold.it/48x100`;
+    let conf=this.getConfig();
+    switch (cm.msgType){
+      case MsgType.Error:
+        this.snotifyService.error(cm.message, cm.generaterdTimePersianStr +"  " + cm.title ,{...conf,timeout:duration});
+        break;
 
+     case MsgType.Info:
+        this.snotifyService.info(cm.message, cm.generaterdTimePersianStr +"  " +cm.title ,{...conf,timeout:duration});
+        break;
+
+     case MsgType.Success:
+        this.snotifyService.success(cm.message, cm.generaterdTimePersianStr +"  " +cm.title ,{...conf,timeout:duration});
+        break;
+    case MsgType.Warning:
+          this.snotifyService.warning(cm.message,cm.generaterdTimePersianStr +"  " + cm.title ,{...conf,timeout:duration});
+          break;
+    default:
+            this.snotifyService.simple(cm.message,cm.generaterdTimePersianStr +"  " + cm.title ,{...conf,timeout:duration,icon});
+            break;
+    }
+    
+  }
   NotifyErr(err: Error, duration: number = 5000) {
+    let conf=this.getConfig();
     console.warn("---------NotifyErr>>>>-----")
     console.error(JSON.stringify(err));
     if (err instanceof HttpErrorResponse) {
-      let error = err;
       let msg = "";
       let httpErr = (err as HttpErrorResponse);
-
       let customMessages=<Array<CustomMessage>>httpErr.error
       if (!!customMessages) {
-        msg = this.flattenCustomMessage(customMessages)
+        for(let customErr of customMessages){
+          this.showCustomMessage(customErr,duration);
+        }
       } else {
         msg = httpErr.message + "  " + typeof (httpErr.error) == "string" ? httpErr.error : JSON.stringify(httpErr.error)
+        this.snotifyService.error(msg, "خطا" ,{...conf,timeout:duration});
+    //  this._snackBar.open(msg, "", { duration: duration, panelClass: "ErrorSnackBar" })
       }
-      this._snackBar.open(msg, "", { duration: duration, panelClass: "ErrorSnackBar" })
     }
     else {
-      this._snackBar.open(err.message, "", { duration: duration })
+     // this._snackBar.open(err.message, "", { duration: duration, panelClass: "ErrorSnackBar"  })
+     this.snotifyService.error(err.message, "خطا" ,{...conf,timeout:duration});
     }
     console.warn("---------NotifyErr<<<<<<------")
   }
 
   ///////////////***************/////////////////
   style = 'material';
-  title = 'Snotify title!';
-  body = 'Lorem ipsum dolor sit amet!';
+  title = '----------';
+  body = '-----------';
   timeout = 30000;
   position: SnotifyPosition = SnotifyPosition.rightBottom;
   progressBar = true;
@@ -77,8 +96,8 @@ export class MessageService {
   dockMax = 8;
   blockMax = 6;
   pauseHover = true;
-  titleMaxLength = 15;
-  bodyMaxLength = 80;
+  titleMaxLength = 150;
+  bodyMaxLength = 800;
 
    /*
   Change global configuration
@@ -104,29 +123,7 @@ export class MessageService {
       pauseOnHover: this.pauseHover
     };
   }
-
-  onSuccess() {
-    this.snotifyService.success(this.body, this.title, this.getConfig());
-  }
-  onInfo() {
-    this.snotifyService.info(this.body, this.title, this.getConfig());
-  }
-  onError() {
-    this.snotifyService.error(this.body, this.title, this.getConfig());
-  }
-  onWarning() {
-    this.snotifyService.warning(this.body, this.title, this.getConfig());
-  }
-  onSimple() {
-    // const icon = `assets/custom-svg.svg`;
-    const icon = `https://placehold.it/48x100`;
-
-    this.snotifyService.simple(this.body, this.title, {
-      ...this.getConfig(),
-      icon
-    });
-  }
-
+  
   onConfirmation() {
     /*
     Here we pass an buttons array, which contains of 2 element of type SnotifyButton
@@ -135,7 +132,7 @@ export class MessageService {
     this.snotifyService.confirm(this.body, this.title, {
       ...config,
       buttons: [
-        { text: 'Yes', action: () => console.log('Clicked: Yes'), bold: false },
+       { text: 'Yes', action: () => console.log('Clicked: Yes'), bold: false },
         { text: 'No', action: () => console.log('Clicked: No') },
         {
           text: 'Later',
@@ -179,7 +176,7 @@ export class MessageService {
             }
           }
         ],
-        placeholder: 'Enter "ng-snotify" to validate this input' // Max-length = 40
+        placeholder: 'محل ورود' // Max-length = 40
       })
       .on('input', toast => {
         console.log(toast.value);
@@ -193,7 +190,7 @@ export class MessageService {
     this.snotifyService.html(html, this.getConfig());
   }
 
-  onClear() {
+  ClearAll() {
     this.snotifyService.clear();
   }
 
@@ -204,16 +201,32 @@ export class MessageService {
 //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  
 //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //       
 export class CustomMessage implements ICustomMessage {
-    message: string;
-    name: string;
-    stack: string;
-  isError: boolean;
-  shouldLog: boolean;
-}
-export interface ICustomMessage {
+  generaterdTime: Date;
+  msgType: MsgType;
   message: string;
   name: string;
   stack: string;
   isError: boolean;
   shouldLog: boolean;
+  title:string;
+  generaterdTimePersianStr:string;
+}
+export interface ICustomMessage {
+  message: string;
+  name: string;
+  stack: string;
+  shouldLog: boolean;
+  generaterdTime:Date;
+  msgType:MsgType
+  title:string;
+  generaterdTimePersianStr:string;
+}
+
+enum MsgType
+{
+    Info='Info',
+    Error='Error',
+    Success='Success',
+    Warning='Warning',
+    Simple='Simple'
 }
