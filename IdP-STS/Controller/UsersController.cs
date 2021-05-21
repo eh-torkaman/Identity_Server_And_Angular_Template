@@ -48,7 +48,7 @@ namespace STS.Controller
                 var user = userMgr.FindByNameAsync(us.UserName).Result;
                 if (user != null)
                 {
-                    var rs = new CustomMessages() { new CustomMessage { Message = "این کاربر قبلاً وجود دارد", MsgTypeEnum = MsgTypeEnum.Error } };
+                    var rs = new ListOfCustomMessages() { new CustomMessage { Message = "این کاربر قبلاً وجود دارد", MsgTypeEnum = MsgTypeEnum.Error } };
                     return BadRequest(rs);
                 }
 
@@ -67,7 +67,7 @@ namespace STS.Controller
             catch (Exception ee)
             {
                 Log.Error(ee.Message);
-                var rs = new CustomMessages() { new CustomMessage(ee) };
+                var rs = new ListOfCustomMessages() { new CustomMessage(ee) };
                 return BadRequest(rs);
             }
         }
@@ -81,13 +81,13 @@ namespace STS.Controller
                 var user = userMgr.FindByNameAsync(us.UserName).Result;
                 if (user == null)
                 {
-                    var rs = new CustomMessages() { new CustomMessage { Message = "این کاربر وجود ندارد", MsgTypeEnum = MsgTypeEnum.Error } };
+                    var rs = new ListOfCustomMessages() { new CustomMessage { Message = "این کاربر وجود ندارد", MsgTypeEnum = MsgTypeEnum.Error } };
 
                     return BadRequest(rs);
                 }
                 if (user.UserName.ToLower() == "SuperAdmin".ToLower())
                 {
-                    var rs = new CustomMessages() { new CustomMessage { Message = "برای این کاربر شدنی نیست", MsgTypeEnum = MsgTypeEnum.Error } };
+                    var rs = new ListOfCustomMessages() { new CustomMessage { Message = "برای این کاربر شدنی نیست", MsgTypeEnum = MsgTypeEnum.Error } };
 
                     return BadRequest(rs);
                 }
@@ -105,7 +105,7 @@ namespace STS.Controller
             {
                 Log.Error(ee.Message);
 
-                var rs = new CustomMessages() { new CustomMessage(ee) };
+                var rs = new ListOfCustomMessages() { new CustomMessage(ee) };
                 return BadRequest(rs);
             }
         }
@@ -119,12 +119,12 @@ namespace STS.Controller
                 var user = userMgr.FindByNameAsync(userName).Result;
                 if (user == null)
                 {
-                    var rs = new CustomMessages() { new CustomMessage { Message = "این کاربر وجود ندارد", MsgTypeEnum = MsgTypeEnum.Error } };
+                    var rs = new ListOfCustomMessages() { new CustomMessage { Message = "این کاربر وجود ندارد", MsgTypeEnum = MsgTypeEnum.Error } };
                     return BadRequest(rs);
                 }
                 if (userName.ToLower() == "SuperAdmin".ToLower())
                 {
-                    var rs = new CustomMessages() { new CustomMessage { Message = "این کاربر قابل پاک شدن نیست", MsgTypeEnum = MsgTypeEnum.Error } };
+                    var rs = new ListOfCustomMessages() { new CustomMessage { Message = "این کاربر قابل پاک شدن نیست", MsgTypeEnum = MsgTypeEnum.Error } };
 
                     return BadRequest(rs);
                 }
@@ -140,7 +140,7 @@ namespace STS.Controller
             {
                 Log.Error(ee.Message);
 
-                var rs = new CustomMessages() { new CustomMessage(ee) };
+                var rs = new ListOfCustomMessages() { new CustomMessage(ee) };
                 return BadRequest(rs);
             }
         }
@@ -154,7 +154,7 @@ namespace STS.Controller
                 var user = userMgr.FindByNameAsync(userName).Result;
                 if (user == null)
                 {
-                    var rs = new CustomMessages() { new CustomMessage { Message = "این کاربر وجود ندارد", MsgTypeEnum = MsgTypeEnum.Error } };
+                    var rs = new ListOfCustomMessages() { new CustomMessage { Message = "این کاربر وجود ندارد", MsgTypeEnum = MsgTypeEnum.Error } };
                     return BadRequest(rs);
                 }
 
@@ -165,7 +165,7 @@ namespace STS.Controller
                 {
                     if (userName.ToLower() == "SuperAdmin".ToLower())
                     {
-                        var rs = new CustomMessages() { new CustomMessage { Message = "این کاربر قابل قفل شدن نیست", MsgTypeEnum = MsgTypeEnum.Error } };
+                        var rs = new ListOfCustomMessages() { new CustomMessage { Message = "این کاربر قابل قفل شدن نیست", MsgTypeEnum = MsgTypeEnum.Error } };
                         return BadRequest(rs); 
                     }
                     user.LockoutEnd = DateTimeOffset.Now.AddYears(10);
@@ -181,7 +181,7 @@ namespace STS.Controller
             catch (Exception ee)
             {
                 Log.Error(ee.Message);
-                var rs = new CustomMessages() { new CustomMessage(ee) };
+                var rs = new ListOfCustomMessages() { new CustomMessage(ee) };
                 return BadRequest(rs);
             }
         }

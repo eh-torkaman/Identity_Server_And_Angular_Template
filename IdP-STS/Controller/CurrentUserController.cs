@@ -50,14 +50,13 @@ namespace IdP.Controller
                 {
                     throw new Exception(result.Errors.First().Description);
                 }
-                var rs= new CustomMessages() {new CustomMessage { Message = "رمز عبور تغییر کرد" } };
+                var rs= new ListOfCustomMessages() {new CustomMessage { Message = "رمز عبور تغییر کرد" } };
                 return Ok( rs);
             }
             catch (Exception ee)
             {
                 Log.Error(ee.Message);
-                var tt0 = new CustomMessage { Message = "رمز عبور تغییر نکرد", MsgTypeEnum = MsgTypeEnum.Warning };
-                var rs = new CustomMessages() {new CustomMessage (ee), tt0 };
+                var rs = new ListOfCustomMessages() {new CustomMessage (ee) };
                 return BadRequest(rs);
             }
         }

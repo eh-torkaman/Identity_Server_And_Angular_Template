@@ -4,7 +4,7 @@ import { BehaviorSubject, empty, Observable, Subject, throwError } from 'rxjs';
 import { Constants } from './constants';
 import { dbClaim, dbUser, UserNameAndPassword, ChangeUserPass } from './interfaces/interfaces_usersOnIdp';
 import { catchError, debounceTime, distinctUntilChanged, filter, map, shareReplay, startWith, switchMap, tap } from 'rxjs/operators';
-import { MessageService } from '../messageService/message.service';
+import { CustomMessage, MessageService } from '../messageService/message.service';
 import { AuthService } from './auth.service';
 
 @Injectable({
@@ -18,6 +18,8 @@ export class IdPUsersService {
 
     this.authService.isLoggedIn().then(loggedIn => { if (loggedIn) this.loadCurrentUser(); });
     this.authService.loginChanged.subscribe(loggedIn => { if (loggedIn) { this.loadCurrentUser(); } else { this.CurrentDbUser.next(null); } });
+
+    this.loadDbRoles();
   }
 
   public ClaimDataChanged() {
@@ -77,6 +79,39 @@ export class IdPUsersService {
       'userName': userName,'password': password });
   }
 
+  private DbRoles: BehaviorSubject<string[] | null> = new BehaviorSubject<string[] | null>(null);
+  public  DbRoles$: Observable<string[] | null> = this.DbRoles.asObservable();
+
+  private loadDbRoles() {
+    this.httpClient.get<string[]>(`${Constants.stsAuthority}api/Roles`).pipe(
+     tap(data => console.log('Roles : ', JSON.stringify(data))),
+      catchError(this.handleError),
+    )
+      .subscribe(rs => { this.DbRoles.next(rs); }
+        , (err) => this.messageService.NotifyErr(err));
+ }
+
+ public DeleteRole(roleName:string){
+   this.httpClient.delete<CustomMessage[]>(`${Constants.stsAuthority}api/Roles/${roleName}`,{observe:"body"}).pipe(
+    tap(data => console.log('Role deleted result : ', JSON.stringify(data))),
+     catchError(this.handleError),
+   ).subscribe(rs=>{
+     this.messageService.Notify(rs);
+     this.loadDbRoles();
+    },
+   (err) => this.messageService.NotifyErr(err))
+ }
+
+ public CreateRole(roleName:string){
+ this.httpClient.post<CustomMessage[]>(`${Constants.stsAuthority}api/Roles/${roleName}`,"",{observe:"body"}).pipe(
+    tap(data => console.log('role Added Result : ', JSON.stringify(data))),
+     catchError(this.handleError),
+   ).subscribe(rs=>{this.messageService.Notify(rs);this.loadDbRoles()},
+   (err) => this.messageService.NotifyErr(err))
+ }
+
+//#region CurrentDbUser
+
   ///////////////////////////////
   private CurrentDbUser: BehaviorSubject<dbUser | null> = new BehaviorSubject<dbUser | null>(null);
   public CurrentDbUser$: Observable<dbUser | null> = this.CurrentDbUser.asObservable();//.pipe(  shareReplay(1));
@@ -101,8 +136,9 @@ export class IdPUsersService {
         
     );
   }
-
-  private handleError(error: HttpErrorResponse) {
+//#endregion CurrentDbUser
+ 
+private handleError(error: HttpErrorResponse) {
     if (error.status === 0) {
       // A client-side or network error occurred. Handle it accordingly.
       console.error('An error occurred:', error.error);
@@ -120,7 +156,7 @@ export class IdPUsersService {
   ///////////////////////////////
 
 
-
+/*
   private handleError__(err: any) {
     console.log("in handleError Func", err)
     // in a real world app, we may send the server to some remote logging infrastructure
@@ -144,7 +180,7 @@ export class IdPUsersService {
     catch {
       return throwError(err)
     }
-  }
+  }*/
 }
 
  

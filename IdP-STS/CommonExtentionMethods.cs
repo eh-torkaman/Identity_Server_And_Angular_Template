@@ -11,5 +11,16 @@ namespace IdP
         {
             return string.IsNullOrWhiteSpace(input) ? "" : input.Trim();
         }
+
+
+        public static string ReplaceAllNonAlphaNumericExceptAllowableListOFCharacters(this string input, string allowableListOFCharacters ="", Boolean toUpper = false)
+        {
+            char[] arr = input.ToCharArray();
+            arr = Array.FindAll<char>(arr, (c => (char.IsLetterOrDigit(c)) || (allowableListOFCharacters.Contains(c))));
+            input = new string(arr);
+            if (toUpper)
+                input = input.ToUpper();
+            return input;
+        }
     }
 }

@@ -15,17 +15,18 @@ export class MessageService {
 
   constructor(/*private _snackBar: MatSnackBar,*/private snotifyService: SnotifyService) { }
 
-  Notify(input: string | Array<CustomMessage>, duration: number = 1000) {
-    let msg = input as string;
+  Notify(input: string | Array<CustomMessage>, duration: number = 3000) {
+    if ((!input)||(input==null))return;
+    let msg =JSON.stringify( input);
 
     console.info("Notify: msg: ", msg,)
 
     let customMessages = <Array<CustomMessage>>input;
 
     if ((!!customMessages) && (typeof (input) !== "string")) {
-      for(let customErr of customMessages){
+      for(let customErr of customMessages)
         this.showCustomMessage(customErr,duration);
-      }
+      return;
     }
     let conf=this.getConfig();
     this.snotifyService.info(msg, "" ,{...conf,timeout:duration});
@@ -34,6 +35,7 @@ export class MessageService {
    
   
   showCustomMessage(cm:CustomMessage,duration:number){
+    if ((!cm)||(cm==null))return;
     const icon = `https://placehold.it/48x100`;
     let conf=this.getConfig();
     switch (cm.msgType){
@@ -58,6 +60,7 @@ export class MessageService {
     
   }
   NotifyErr(err: Error, duration: number = 5000) {
+    if ((!err)||(err==null))return;
     let conf=this.getConfig();
     console.warn("---------NotifyErr>>>>-----")
     console.error(JSON.stringify(err));

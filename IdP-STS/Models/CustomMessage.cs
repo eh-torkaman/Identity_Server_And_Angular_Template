@@ -94,18 +94,26 @@ namespace IdP.Models
 
     }
 
-    public class CustomMessages:List<CustomMessage>
+    public class ListOfCustomMessages:List<CustomMessage>
     {
-        public CustomMessages()
+        public ListOfCustomMessages()
         {
 
         }
+        public ListOfCustomMessages(string msg, MsgTypeEnum msgTypeEnum= MsgTypeEnum.Info)
+        {
+            this.Add(new CustomMessage() {Message=msg , MsgTypeEnum= msgTypeEnum });
+        }
+        public ListOfCustomMessages(Exception ee)
+        {
+            this.Add(new CustomMessage(ee) );
+        }
 
-        public CustomMessages(CustomMessage msg)
+        public ListOfCustomMessages(CustomMessage msg)
         {
             this.Add(msg);
         }
-        public CustomMessages(CustomMessages msgs)
+        public ListOfCustomMessages(ListOfCustomMessages msgs)
         {
             this.AddRange(msgs);
         }
