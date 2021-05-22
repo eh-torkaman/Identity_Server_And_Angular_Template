@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControlOptions, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { ConfirmedValidator } from '../../../validators/confirm-password.validator';
 import { Constants } from '../../constants';
@@ -21,7 +21,7 @@ export class CurrentUserManagerComponent implements OnInit {
       confirmPassword: new FormControl('', [Validators.required, Validators.minLength(2)])
     }, {
       validator: ConfirmedValidator('newPassword', 'confirmPassword')
-    })
+    } as AbstractControlOptions)
   }
 
   stsAuthorityUrl: string = Constants.stsAuthority;
