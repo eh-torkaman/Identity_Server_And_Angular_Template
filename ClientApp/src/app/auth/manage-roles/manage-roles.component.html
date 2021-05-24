@@ -1,0 +1,11 @@
+<p>manage-roles works!</p>
+ 
+<mat-selection-list #roles [multiple]="false">
+    <mat-list-option *ngFor="let role of DbRoles$ | async as DbRoles" [value]="role">
+      {{role}}
+    </mat-list-option>
+  </mat-selection-list>
+
+  <p *ngIf="!(roles.selectedOptions.selected[0]?.value)">
+    یک مورد را جهت حذف انتخاب کنید
+  </p>
